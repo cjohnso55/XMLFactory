@@ -168,7 +168,6 @@
     <Compile Include="Common\SqlHelper.cs" />
     <Compile Include="ACA\TransmissionContext.cs" />
     <Compile Include="Common\VendorInfo.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Interfaces\IExporterModule.cs" />
     <Compile Include="Interfaces\IRootXmlClass.cs" />
     <Compile Include="Interfaces\IXmlDataPopulator.cs" />
