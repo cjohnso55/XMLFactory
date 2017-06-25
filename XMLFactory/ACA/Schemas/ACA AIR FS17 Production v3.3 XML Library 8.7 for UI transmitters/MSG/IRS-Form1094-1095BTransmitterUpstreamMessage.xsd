@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by Internal Revenue Service (Internal Revenue Service) -->
+<xsd:schema xmlns="urn:us:gov:treasury:irs:msg:form1094-1095Btransmitterupstreammessage" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:irs="urn:us:gov:treasury:irs:common" xmlns:airty16="urn:us:gov:treasury:irs:ext:aca:air:ty16" targetNamespace="urn:us:gov:treasury:irs:msg:form1094-1095Btransmitterupstreammessage" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<release>ACA Release TY2016</release>
+		</xsd:appinfo>
+		<xsd:documentation>Form-1094B (Issuer) Transmittal and Form 1095B - Transmittal of Health Insurance Coverage Statements
+			<VersionNum>3.5</VersionNum>
+			<VersionEffectiveBeginDt>2014-03-20</VersionEffectiveBeginDt>
+		</xsd:documentation>
+	</xsd:annotation>
+	<!-- ===== Imports ===== -->
+	<xsd:import namespace="urn:us:gov:treasury:irs:common" schemaLocation="../COMMON/IRS-CAC.xsd"/>
+	<xsd:import namespace="urn:us:gov:treasury:irs:ext:aca:air:ty16" schemaLocation="../EXT/IRS-EXT-ACA-AIR-1094BC.xsd"/>
+	<!-- ================================ -->
+	<!-- ===== Root Element Declarations ===== -->
+	<!-- ================================ -->
+	<xsd:element name="Form109495BTransmittalUpstream" type="Form109495BTrnsmtUpstreamType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<Component>
+					<DictionaryEntryNm>Form109495B Transmission Upstream</DictionaryEntryNm>
+					<MajorVersionNum>1</MajorVersionNum>
+					<MinorVersionNum>1</MinorVersionNum>
+					<VersionEffectiveBeginDt>2014-11-04</VersionEffectiveBeginDt>
+					<VersionDescriptionTxt>Initial Version</VersionDescriptionTxt>
+					<DescriptionTxt>The elements associated with 1094/1095B data generated EOY report</DescriptionTxt>
+				</Component>
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ======================== -->
+	<!-- ===== Type Defintions ===== -->
+	<!-- ======================== -->
+	<!-- Transmittal(Issuer) of Health Insurance Coverage Statements. -->
+	<xsd:complexType name="Form109495BTrnsmtUpstreamType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<Component>
+					<DictionaryEntryNm>Form109495B Transmission Upstream Type</DictionaryEntryNm>
+					<MajorVersionNum>1</MajorVersionNum>
+					<MinorVersionNum>1</MinorVersionNum>
+					<VersionEffectiveBeginDt>2014-11-04</VersionEffectiveBeginDt>
+					<VersionDescriptionTxt>Initial Version</VersionDescriptionTxt>
+					<DescriptionTxt>The elements associated with 1094B/ 1095BForms EOY report Transmission</DescriptionTxt>
+				</Component>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="airty16:Form1094BUpstreamDetail" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

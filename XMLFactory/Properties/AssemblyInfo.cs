@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ACAEFileGenerator")]
+[assembly: AssemblyTitle("XMLFactory")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ACAEFileGenerator")]
+[assembly: AssemblyProduct("XMLFactory")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0ca928bf-4b69-4f6f-91f1-a5b55b95423d")]
+[assembly: Guid("f3275600-9b8f-4ec1-8d8e-26d265174c6c")]
 
 // Version information for an assembly consists of the following four values:
 //
