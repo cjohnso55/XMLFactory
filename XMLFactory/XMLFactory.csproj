@@ -173,7 +173,12 @@
     <Compile Include="Interfaces\IXmlDataPopulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="README.txt" />
+    <Content Include="SQL\dbo.1095Initilization.sql" />
+    <Content Include="SQL\dbo.ACAEFileGetTransmissionDataSet.sql" />
+    <Content Include="SQL\dbo.ACAEFileSubmissionTest.sql" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="ACA\Schemas\ACA AIR FS17 Production v3.3 XML Library 8.7 for UI transmitters\EXT\IRS-EXT-ACA-AIR-1094BC.xsd">
       <SubType>Designer</SubType>

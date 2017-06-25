@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.Sql;
 using System.Data.SqlClient;
 using System.IO;
 using XmlFactory.Common;
@@ -56,10 +55,10 @@ namespace XMLFactory.ACA
             PaymentYear = paymentYear;
             DefaultSaveDirectoryPath = defaultSaveDirectoryPath;
 
-            TransmitterControlCode   = _getTransmitterControlCodeFromDB();
-            GenerateXmlOnSchemaError = _getGenerateXmlOnSchemaErrorFromDB();
-            CorrectedReceiptID       = _getCorrectedReceiptIDFromDB();
-            TransmissionDataSet      = _getTransmissionDataSetFromDB();
+            TransmitterControlCode   = getTransmitterControlCodeFromDB();
+            GenerateXmlOnSchemaError = getGenerateXmlOnSchemaErrorFromDB();
+            CorrectedReceiptID       = getCorrectedReceiptIDFromDB();
+            TransmissionDataSet      = getTransmissionDataSetFromDB();
 
             EmployeesToTransmit            = TransmissionDataSet.Tables[1];
             DependentsToTransmit           = TransmissionDataSet.Tables[2];
@@ -69,14 +68,14 @@ namespace XMLFactory.ACA
             TransmissionID                 = EmployeesToTransmit.Rows.Count > 0 ? Convert.ToInt32(EmployeesToTransmit.Rows[0]["NewTransmissionID"]) : 0;
             TransmissionHistory            = TransmissionDataSet.Tables[5];        
 
-            FormDataFilePath = _createFormDataFilePath();
-            ManifestFilePath = _createManifestFilePath();
+            FormDataFilePath = createFormDataFilePath();
+            ManifestFilePath = createManifestFilePath();
         }
 
         /// <summary>
         /// Retrieves the TransmitterControlCode from dbo.PRCO.
         /// </summary>
-        private string _getTransmitterControlCodeFromDB()
+        private string getTransmitterControlCodeFromDB()
         {
             var sqlCommand = new SqlCommand("Select   Top(1) TCC   " +
                                                 "from  dbo.PRCO     " +
@@ -85,7 +84,7 @@ namespace XMLFactory.ACA
 
             sqlCommand.Parameters.Add(new SqlParameter() { ParameterName = "@PRCo", SqlDbType = SqlDbType.TinyInt, Value = Company });
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.Connection = Helper.get_UserConnection(null);
+            sqlCommand.Connection = Helper.getUserConnection(null);
 
             return SqlHelper.ExecuteScalar(sqlCommand).ToString();
         }
@@ -93,10 +92,10 @@ namespace XMLFactory.ACA
         /// <summary>
         /// Creates schema compliant file path of the form data file.
         /// </summary>
-        private string _createFormDataFilePath()
+        private string createFormDataFilePath()
         {
-            var filename = string.Format(@"{0}_{1}_{2}.xml",
-                "1094C_Request",
+            var filename = string.Format(@"{0}{1}{2}.xml",
+                "1094CRequest",
                 TransmitterControlCode,
                 FilePathTimeStamp);
 
@@ -106,10 +105,10 @@ namespace XMLFactory.ACA
         /// <summary>
         /// The schema compliant filepath of the manifest file.
         /// </summary>
-        private string _createManifestFilePath()
+        private string createManifestFilePath()
         {
-                var filename = string.Format(@"{0}_{1}_{2}.xml",
-                    "1094C_Manifest",
+                var filename = string.Format(@"{0}{1}{2}.xml",
+                    "1094CManifest",
                     TransmitterControlCode,
                     FilePathTimeStamp);
 
@@ -119,16 +118,15 @@ namespace XMLFactory.ACA
         /// <summary>
         /// Retrieves the GenerateXmlOnSchemaError flag from dbo.PRCO.
         /// </summary>
-        private bool _getGenerateXmlOnSchemaErrorFromDB()
+        private bool getGenerateXmlOnSchemaErrorFromDB()                       
         {
                 var sqlCommand = new SqlCommand("Select   Top(1) GenerateACAXmlOnSchemaErrorYN " +
-                                                   "from  dbo.PRCO     " +
-                                                   "where PRCo = @PRCo " +
-                                                   "order by GLCo      ");
+                                                   "from  dbo.ACAEFileMetadata     " +
+                                                   "where PRCo = @PRCo " );
 
                 sqlCommand.Parameters.Add(new SqlParameter() { ParameterName = "@PRCo", SqlDbType = SqlDbType.TinyInt, Value = Company });
                 sqlCommand.CommandType = CommandType.Text;
-                sqlCommand.Connection = Helper.get_UserConnection(null);
+                sqlCommand.Connection = Helper.getUserConnection(null);
 
                 return SqlHelper.ExecuteScalar(sqlCommand).ToString() == "Y";
         }
@@ -137,18 +135,18 @@ namespace XMLFactory.ACA
         /// <summary>
         /// Retrieves the receiptID of the previous transmission for a company/tax year.  
         /// </summary>
-        private string _getCorrectedReceiptIDFromDB()
+        private string getCorrectedReceiptIDFromDB()
         {          
             var getPreviousTransIDCommand = new SqlCommand("Select IsNull(max(hist.TransmissionID), 0)       " +
                                                                 "from  dbo.ACAeFileTransmissionHistory hist  " + 
                                                                 "where hist.TaxYear = @TaxYear " +
                                                                 "and   hist.PRCo    = @PRCo    ");
 
-            getPreviousTransIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@PRCo",    SqlDbType = SqlDbType.TinyInt, Value = Company });
+            getPreviousTransIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@Company",    SqlDbType = SqlDbType.TinyInt, Value = Company });
             getPreviousTransIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@TaxYear", SqlDbType = SqlDbType.Int, Value = TaxYear });
 
             getPreviousTransIDCommand.CommandType = CommandType.Text;
-            getPreviousTransIDCommand.Connection = Helper.get_UserConnection(null);
+            getPreviousTransIDCommand.Connection = Helper.getUserConnection(null);
                 
             int previousTransmissionID = (int)SqlHelper.ExecuteScalar(getPreviousTransIDCommand);
 
@@ -166,12 +164,12 @@ namespace XMLFactory.ACA
                                                                     " and hist.TaxYear = @TaxYear  " +
                                                                     " and hist.PRCo = @PRCo");
 
-            getCorrectedRecieptIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@PRCo",    SqlDbType = SqlDbType.TinyInt, Value = Company });
+            getCorrectedRecieptIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@Company",    SqlDbType = SqlDbType.TinyInt, Value = Company });
             getCorrectedRecieptIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@TaxYear", SqlDbType = SqlDbType.Int,     Value = TaxYear });
             getCorrectedRecieptIDCommand.Parameters.Add(new SqlParameter() { ParameterName = "@PreviousTransmissionID",  SqlDbType = SqlDbType.Int, Value = previousTransmissionID });
 
             getCorrectedRecieptIDCommand.CommandType = CommandType.Text;
-            getCorrectedRecieptIDCommand.Connection = Helper.get_UserConnection(null);
+            getCorrectedRecieptIDCommand.Connection = Helper.getUserConnection(null);
 
             return SqlHelper.ExecuteScalar(getCorrectedRecieptIDCommand).ToString();
         }
@@ -179,22 +177,22 @@ namespace XMLFactory.ACA
         /// <summary>
         /// Returns all the data points needed to populate the form data and manifest xml.
         /// </summary>
-        private DataSet _getTransmissionDataSetFromDB()
+        private DataSet getTransmissionDataSetFromDB()
         {
             SqlCommand cmd;
 
             if (IsTest)
             {
-                cmd = new SqlCommand("vspPRACAEFileSubmissionTest", Helper.get_UserConnection()) { CommandType = CommandType.StoredProcedure };
+                cmd = new SqlCommand("EFileSubmissionTest", Helper.get_UserConnection()) { CommandType = CommandType.StoredProcedure };
 
-                cmd.Parameters.AddWithValue("@PRCo", Company);
+                cmd.Parameters.AddWithValue("@Company", Company);
                 cmd.Parameters.AddWithValue("@TaxYear", TaxYear);
             }
             else
             {
-                cmd = new SqlCommand("vspPRACAEFileGetTransmissionDataSet", Helper.get_UserConnection()) { CommandType = CommandType.StoredProcedure };
+                cmd = new SqlCommand("GetTransmissionDataSet", Helper.get_UserConnection()) { CommandType = CommandType.StoredProcedure };
 
-                cmd.Parameters.AddWithValue("@PRCo", Company);
+                cmd.Parameters.AddWithValue("@Company", Company);
                 cmd.Parameters.AddWithValue("@TaxYear", TaxYear);
                 cmd.Parameters.AddWithValue("@TransmissionType", TransmissionType);
                 cmd.Parameters.Add("@ErrorMessage", SqlDbType.VarChar, 255).Direction = ParameterDirection.Output;

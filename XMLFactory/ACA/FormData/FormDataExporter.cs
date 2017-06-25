@@ -11,39 +11,39 @@ namespace XMLFactory.ACA.FormData
     /// </summary>
     public class FormDataExporter : IExporterModule
     {
-        private readonly DataTable _employeesToTransmit;
-        private readonly DataTable _dependentsToTransmit;
-        private readonly DataTable _employerSubsidiariesToTransmit;
+        private readonly DataTable employeesToTransmit;
+        private readonly DataTable dependentsToTransmit;
+        private readonly DataTable employerSubsidiariesToTransmit;
 
-        private readonly DataRow _employerInfoToTransmit;
-        private readonly DataRow _correctedTransmissionInfo;
+        private readonly DataRow employerInfoToTransmit;
+        private readonly DataRow correctedTransmissionInfo;
 
-        private readonly bool _isTest;
-        private readonly bool _generateXmlOnSchemaError;
+        private readonly bool isTest;
+        private readonly bool generateXmlOnSchemaError;
 
         public FormDataExporter(DataSet transmissionDataSet, bool isTest, bool generateXmlOnSchemaError)
         {
-            _isTest = isTest;
-            _generateXmlOnSchemaError = generateXmlOnSchemaError;
+            isTest = this.isTest;
+            generateXmlOnSchemaError = this.generateXmlOnSchemaError;
 
-            _employeesToTransmit  = transmissionDataSet.Tables[1];
-            _dependentsToTransmit = transmissionDataSet.Tables[2];
-            _employerSubsidiariesToTransmit = transmissionDataSet.Tables[3];
+            employeesToTransmit  = transmissionDataSet.Tables[1];
+            dependentsToTransmit = transmissionDataSet.Tables[2];
+            employerSubsidiariesToTransmit = transmissionDataSet.Tables[3];
 
-            _employerInfoToTransmit    = transmissionDataSet.Tables[0].Rows.Count > 0 ? transmissionDataSet.Tables[0].Rows[0] : transmissionDataSet.Tables[0].NewRow();
-            _correctedTransmissionInfo = transmissionDataSet.Tables[4].Rows.Count > 0 ? transmissionDataSet.Tables[4].Rows[0] : transmissionDataSet.Tables[4].NewRow();
+            employerInfoToTransmit    = transmissionDataSet.Tables[0].Rows.Count > 0 ? transmissionDataSet.Tables[0].Rows[0] : transmissionDataSet.Tables[0].NewRow();
+            correctedTransmissionInfo = transmissionDataSet.Tables[4].Rows.Count > 0 ? transmissionDataSet.Tables[4].Rows[0] : transmissionDataSet.Tables[4].NewRow();
         }
 
         public bool GenerateXmlFile(string xmlFilepath, out IRootXmlClass formDataFile)
         {
             var formDataPopulator = new FormDataPopulator(
-                    pr1094HeaderRow:               _employerInfoToTransmit, 
-                    pr1095HeaderRows:              _employeesToTransmit, 
-                    pr1095CoveredRows:             _dependentsToTransmit, 
-                    pr1094OtherAleMembers:         _employerSubsidiariesToTransmit,
-                    prACAEFileTransmissionHistory: _correctedTransmissionInfo,
-                    isTest:                        _isTest,
-                    generateXmlOnSchemaError:      _generateXmlOnSchemaError);
+                    pr1094HeaderRow:               employerInfoToTransmit, 
+                    pr1095HeaderRows:              employeesToTransmit, 
+                    pr1095CoveredRows:             dependentsToTransmit, 
+                    pr1094OtherAleMembers:         employerSubsidiariesToTransmit,
+                    prACAEFileTransmissionHistory: correctedTransmissionInfo,
+                    isTest:                        isTest,
+                    generateXmlOnSchemaError:      generateXmlOnSchemaError);
 
             formDataFile = formDataPopulator.GetXmlRootClassPopulated();
           

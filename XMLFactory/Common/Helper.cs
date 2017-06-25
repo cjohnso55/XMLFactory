@@ -111,6 +111,11 @@ namespace XMLFactory.Common
                 || value.Equals(decimal.Zero);
         }
 
+        internal static SqlConnection getUserConnection(object p)
+        {
+            throw new NotImplementedException();
+        }
+
         internal static SqlConnection get_UserConnection(object p)
         {
             throw new NotImplementedException();
