@@ -16,7 +16,4 @@ and generating some data at some point.
 Once the fields are mapped, it should be as simple as updating the two schemas provided to generate the documents
 the IRS requires, then fixing any issues found in testing.
 
-I wish no one ther hell of working with government contractors.  If this helps someone, it would be at list the tiniest
-bit redeeming.
-
 Craig
