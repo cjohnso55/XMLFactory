@@ -9,6 +9,10 @@ The schema validation was accomplished using xsd2code++.
 
 Instructions to build the file are located at the top of the generated code (CustomAssemblies.XMLFactory.Manifest.TransmitterACAUIBusinessHeader and XMLFactory.ACA.FormData.Form109495CTransmittalUpstreamType classes).
 
+The nuts basic flow is as follows:  
+FormDataPopulator grabs the relevant data from the database.
+FormDataExporter exports the generated xml in accordance with the IRS provided schema.
+
 While the database mappings will be different if one were to port this to another system, I've included the sproc that I wrote to retrieve from the database I was using. I may get around to dummying something up in a database project, and generating some data at some point.
 
 Once the fields are mapped, it should be as simple as updating the two schemas provided to generate the documents the IRS requires, then fixing any issues found in testing.
